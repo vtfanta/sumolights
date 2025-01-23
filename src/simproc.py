@@ -1,6 +1,10 @@
 import sys, os, time
 from multiprocessing import *
+from silence_tensorflow import silence_tensorflow
+silence_tensorflow("ERROR")
 import tensorflow as tf
+tf.get_logger().setLevel('ERROR')
+tf.autograph.set_verbosity(0)
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')

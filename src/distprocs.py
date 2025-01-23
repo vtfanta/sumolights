@@ -20,6 +20,9 @@ def get_sim(sim_str):
     elif sim_str == 'double':                                       
         cfg_fp = 'networks/double.sumocfg'                         
         net_fp = 'networks/double.net.xml'                           
+    elif sim_str == 'my_test':
+        cfg_fp = 'networks/my_test.sumocfg'
+        net_fp = 'networks/my_test.net.xml'
     return cfg_fp, net_fp                                           
 
 class DistProcs:

@@ -112,7 +112,8 @@ class TrafficSignalController:
         return lane_vehicles
 
     def get_tl_green_phases(self):
-        logic = self.conn.trafficlight.getCompleteRedYellowGreenDefinition(self.id)[0]
+        # logic = self.conn.trafficlight.getCompleteRedYellowGreenDefinition(self.id)[0]
+        logic = self.conn.trafficlight.getAllProgramLogics(self.id)[0]
         #get only the green phases
         green_phases = [ p.state for p in logic.getPhases() 
                          if 'y' not in p.state 

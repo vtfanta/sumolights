@@ -44,13 +44,18 @@ class SumoSim:
         self.t = 0
         self.v_start_times = {}
         self.v_travel_times = {}
-        self.vehiclegen = None
-        if self.args.sim == 'double' or self.args.sim == 'single':
-            self.vehiclegen = VehicleGen(self.netdata, 
-                                         self.args.sim_len, 
-                                         self.args.demand, 
-                                         self.args.scale,
-                                         self.args.mode, self.conn) 
+        # self.vehiclegen = None
+        # if self.args.sim == 'double' or self.args.sim == 'single':
+        #     self.vehiclegen = VehicleGen(self.netdata, 
+        #                                  self.args.sim_len, 
+        #                                  self.args.demand, 
+        #                                  self.args.scale,
+        #                                  self.args.mode, self.conn) 
+        self.vehiclegen = VehicleGen(self.netdata,
+                                        self.args.sim_len,
+                                        self.args.demand,
+                                        self.args.scale,
+                                        self.args.mode, self.conn)
 
     def serverless_connect(self):
         traci.start([self.sumo_cmd, 
