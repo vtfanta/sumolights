@@ -33,6 +33,8 @@ class VehicleGen:
         elif demand == 'dynamic':
             self.v_schedule = self.gen_dynamic_demand(mode)
             self.gen_vehicles = self.gen_dynamic
+        elif demand == 'custom':
+            self.gen_vehicles = self.gen_custom
 
     def run(self):
         self.gen_vehicles()
@@ -88,7 +90,13 @@ class VehicleGen:
             ###if no vehicles in sim, spawn 1 on random link
             veh_spawn_edge = np.random.choice(self.origins)
             self.gen_veh( [veh_spawn_edge] )
-
+            
+    def gen_custom(self):
+        if self.t % 10 == 1:
+            ###every 10 seconds spawn a vehicle
+            veh_spawn_edge = np.random.choice(self.origins)
+            self.gen_veh( [veh_spawn_edge] )
+        
     def gen_veh( self, veh_edges ):
         for e in veh_edges:
             vid = e+str(self.vehicles_created)
