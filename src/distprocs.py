@@ -26,6 +26,9 @@ def get_sim(sim_str):
     elif sim_str =='grid':
         cfg_fp = 'networks/grid.sumocfg'
         net_fp = 'networks/grid.net.xml'
+    elif sim_str == 'pub_test':
+        cfg_fp = 'networks/pub_test.sumocfg'
+        net_fp = 'networks/pub_test.net.xml'
     else:
         print('Invalid sim string, please provide valid sim string (or modify this if-else)')
     return cfg_fp, net_fp                                           

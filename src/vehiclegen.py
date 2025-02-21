@@ -35,6 +35,8 @@ class VehicleGen:
             self.gen_vehicles = self.gen_dynamic
         elif demand == 'custom':
             self.gen_vehicles = self.gen_custom
+        else:
+            raise ValueError('invalid demand type')
 
     def run(self):
         self.gen_vehicles()
@@ -93,14 +95,21 @@ class VehicleGen:
             
     def gen_custom(self):
         if self.t % 10 == 1:
-            ###every 10 seconds spawn a vehicle
+            pass
+            ##every 10 seconds spawn a vehicle
             veh_spawn_edge = np.random.choice(self.origins)
             self.gen_veh( [veh_spawn_edge] )
+            
+    # perform actions of the individual vehicles (get their position, get the distance between them, exchange messages)
+    def perform_actions(self):
+        bus_IDs = list(filter(lambda t: self.conn.vehicle.getVehicleClass(t) == "bus", self.conn.vehicle.getIDList()))
+        print(bus_IDs)
         
     def gen_veh( self, veh_edges ):
         for e in veh_edges:
             vid = e+str(self.vehicles_created)
-            self.conn.vehicle.addFull( vid, e, departLane="best" )
+            # self.conn.vehicle.addFull( vid, e, departLane="best", typeID="bus")
+            self.conn.vehicle.addFull( vid, e, departLane="best")
             self.set_veh_route(vid)
             self.vehicles_created += 1
 

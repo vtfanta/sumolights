@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-02-17 11:05:11 by Eclipse SUMO netedit Version 1.22.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- Routes -->
+    <route id="r_0" edges="B0C0 C0C1 C1C2 C2B2 B2A2 A2A1 A1A0 A0B0" color="yellow" repeat="10" cycleTime="300">
+        <stop busStop="bs_0" duration="20" until="40"/>
+        <stop busStop="bs_1" duration="20" until="130"/>
+        <stop busStop="bs_2" duration="20" until="190"/>
+        <stop busStop="bs_3" duration="20" until="250"/>
+    </route>
+    <route id="r_1" edges="C0B0 B0A0 A0A1 A1A2 A2B2 B2C2 C2C1 C1C0" color="yellow" repeat="10" cycleTime="300">
+        <stop busStop="bs_4" duration="20"/>
+        <stop busStop="bs_5" duration="20"/>
+        <stop busStop="bs_6" duration="20"/>
+        <stop busStop="bs_7" duration="20"/>
+    </route>
+    
+    <personFlow id="p_0" begin="0.00" end="10000" probability="0.1">
+        <personTrip from="B0C0" busStop="bs_3" modes="public"/>
+    </personFlow>
+</routes>

@@ -155,6 +155,7 @@ class SumoSim:
             #create vehicles if vehiclegen class exists
             if self.vehiclegen:
                 self.vehiclegen.run()
+                self.vehiclegen.perform_actions()
             self.update_travel_times()
             #run all traffic signal controllers in network
             for t in self.tsc:
