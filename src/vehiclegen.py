@@ -1,4 +1,6 @@
 import os, sys
+import math
+import numpy as np
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -25,6 +27,9 @@ class VehicleGen:
         self.scale = scale
         self.sim_len = sim_len
         self.t = 0
+        
+        # vehicle state for consensus
+        self.veh_states = None
 
         ###determine what function we run every step to 
         ###generate vehicles into sim
@@ -35,6 +40,7 @@ class VehicleGen:
             self.gen_vehicles = self.gen_dynamic
         elif demand == 'custom':
             self.gen_vehicles = self.gen_custom
+            self.veh_states = {"v_0": 1.0, "v_1": 0.0}
         else:
             raise ValueError('invalid demand type')
 
@@ -103,7 +109,28 @@ class VehicleGen:
     # perform actions of the individual vehicles (get their position, get the distance between them, exchange messages)
     def perform_actions(self):
         bus_IDs = list(filter(lambda t: self.conn.vehicle.getVehicleClass(t) == "bus", self.conn.vehicle.getIDList()))
-        print(bus_IDs)
+        dist_dict = {(v1, v2): math.sqrt(
+            (self.conn.vehicle.getPosition(v1)[0] - self.conn.vehicle.getPosition(v2)[0])**2 +
+            (self.conn.vehicle.getPosition(v1)[1] - self.conn.vehicle.getPosition(v2)[1])**2) for v1 in bus_IDs for v2 in bus_IDs if v1 != v2}
+        
+        for i in range(len(bus_IDs)):
+            for j in range(i+1, len(bus_IDs)):
+                if dist_dict[(bus_IDs[i], bus_IDs[j])] < 100:
+                    # print("Bus " + bus_IDs[i] + " is close to Bus " + bus_IDs[j] + " at distance " + str(dist_dict[(bus_IDs[i], bus_IDs[j])]))
+                    # print(f"{self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+                    # communication and discrete-time consensus
+                    self.conn.vehicle.setColor(bus_IDs[i], (255, 0, 0, 255))
+                    self.conn.vehicle.setColor(bus_IDs[j], (255, 0, 0, 255))
+                    self.veh_states['v_0'] = 1 / (1 + 1) * (self.veh_states['v_0'] + self.veh_states['v_1'])
+                    self.veh_states['v_1'] = 1 / (1 + 1) * (self.veh_states['v_1'] + self.veh_states['v_0'])
+                    print(f"CLOSE, {self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+                else:
+                    self.conn.vehicle.setColor(bus_IDs[i], (255, 255, 0, 255))
+                    self.conn.vehicle.setColor(bus_IDs[j], (255, 255, 0, 255))
+                    self.veh_states['v_0'] += 0.4 * (np.random.rand() - 0.5)
+                    self.veh_states['v_1'] += 0.4 * (np.random.rand() - 0.5)
+                    print(f"{self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+
         
     def gen_veh( self, veh_edges ):
         for e in veh_edges:
