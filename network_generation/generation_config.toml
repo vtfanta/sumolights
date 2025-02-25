@@ -1,0 +1,19 @@
+# Configuration file for generating SUMO network with bus stops and routes
+
+[network]
+grid_size = 3
+edge_length = 100
+intersection_control = "traffic_light"
+no_turnarounds = false
+terminus_length = 50
+sidewalks = true
+output_file = "grid.net.xml"
+
+[bus_stops]
+every_nth = 2
+stop_length = 7
+stop_position = 50
+output_file = "grid.bus_stops.add.xml"
+
+
+[routes]

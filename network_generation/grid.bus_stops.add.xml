@@ -1,0 +1,16 @@
+<additional>
+    <busStop id="busStop_0" lane="A0A1_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_1" lane="A1A0_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_2" lane="A1B1_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_3" lane="B1A1_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_4" lane="A2B2_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_5" lane="B2A2_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_6" lane="B0B1_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_7" lane="B1B0_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_8" lane="B1B2_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_9" lane="B2B1_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_10" lane="B2C2_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_11" lane="C2B2_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_12" lane="C0C1_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+    <busStop id="busStop_13" lane="C1C0_0" startPos="50.0" endPos="57.0" friendlyPos="true"/>
+</additional>
