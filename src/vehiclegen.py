@@ -40,11 +40,25 @@ class VehicleGen:
             self.gen_vehicles = self.gen_dynamic
         elif demand == 'custom':
             self.gen_vehicles = self.gen_custom
-            self.veh_states = {"v_0": 1.0, "v_1": 0.0}
         else:
             raise ValueError('invalid demand type')
+        
+    def run_at_start(self):
+        # initialize vehicle states for consensus
+        self.veh_states = {bus_id : np.random.randn() for bus_id in self.get_bus_ids()}
+        
+        # create lines connecting buses to visualize communication
+        bus_ids = self.get_bus_ids()
+        for i in range(len(bus_ids)):
+            for j in range(i+1, len(bus_ids)):
+                    self.conn.polygon.add(f"line_{i}_{j}", [(-100., 0.), (100., 0.)], color=(255, 0, 0, 0), lineWidth=0.5, layer=10)
 
     def run(self):
+        # this runs only once
+        if self.t == 1:
+            self.run_at_start()
+            print("HI")
+
         self.gen_vehicles()
         self.t += 1
 
@@ -106,13 +120,18 @@ class VehicleGen:
             veh_spawn_edge = np.random.choice(self.origins)
             self.gen_veh( [veh_spawn_edge] )
             
+    def get_bus_ids(self):
+        return list(filter(lambda t: self.conn.vehicle.getVehicleClass(t) == "bus", self.conn.vehicle.getIDList()))
+    
+    def get_bus_distance(self, bus_id1, bus_id2):
+        return math.sqrt(
+            (self.conn.vehicle.getPosition(bus_id1)[0] - self.conn.vehicle.getPosition(bus_id2)[0])**2 +
+            (self.conn.vehicle.getPosition(bus_id1)[1] - self.conn.vehicle.getPosition(bus_id2)[1])**2)
+
     # perform actions of the individual vehicles (get their position, get the distance between them, exchange messages)
     def perform_actions(self):
-        bus_IDs = list(filter(lambda t: self.conn.vehicle.getVehicleClass(t) == "bus", self.conn.vehicle.getIDList()))
-        dist_dict = {(v1, v2): math.sqrt(
-            (self.conn.vehicle.getPosition(v1)[0] - self.conn.vehicle.getPosition(v2)[0])**2 +
-            (self.conn.vehicle.getPosition(v1)[1] - self.conn.vehicle.getPosition(v2)[1])**2) for v1 in bus_IDs for v2 in bus_IDs if v1 != v2}
-        
+        bus_IDs = self.get_bus_ids()
+        dist_dict = {(v1, v2):  self.get_bus_distance(v1, v2) for v1 in bus_IDs for v2 in bus_IDs if v1 != v2}       
         for i in range(len(bus_IDs)):
             for j in range(i+1, len(bus_IDs)):
                 if dist_dict[(bus_IDs[i], bus_IDs[j])] < 100:
@@ -124,12 +143,21 @@ class VehicleGen:
                     self.veh_states['v_0'] = 1 / (1 + 1) * (self.veh_states['v_0'] + self.veh_states['v_1'])
                     self.veh_states['v_1'] = 1 / (1 + 1) * (self.veh_states['v_1'] + self.veh_states['v_0'])
                     print(f"CLOSE, {self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+                    
+                    bus1_pos = self.conn.vehicle.getPosition(bus_IDs[i])
+                    bus2_pos = self.conn.vehicle.getPosition(bus_IDs[j])
+                    self.conn.polygon.setShape(f"line_{i}_{j}", [bus1_pos, bus2_pos])
+                    self.conn.polygon.setColor(f"line_{i}_{j}", (255, 0, 0, 255))
                 else:
                     self.conn.vehicle.setColor(bus_IDs[i], (255, 255, 0, 255))
                     self.conn.vehicle.setColor(bus_IDs[j], (255, 255, 0, 255))
                     self.veh_states['v_0'] += 0.4 * (np.random.rand() - 0.5)
                     self.veh_states['v_1'] += 0.4 * (np.random.rand() - 0.5)
                     print(f"{self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+
+                    bus1_pos = self.conn.vehicle.getPosition(bus_IDs[i])
+                    bus2_pos = self.conn.vehicle.getPosition(bus_IDs[j])
+                    self.conn.polygon.setColor(f"line_{i}_{j}", (255, 0, 0, 0))
 
         
     def gen_veh( self, veh_edges ):
