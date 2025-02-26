@@ -4,7 +4,7 @@
 grid_size = 3
 edge_length = 100
 intersection_control = "traffic_light"
-no_turnarounds = false
+no_turnarounds = true
 terminus_length = 50
 sidewalks = true
 output_file = "grid.net.xml"
@@ -15,5 +15,12 @@ stop_length = 7
 stop_position = 50
 output_file = "grid.bus_stops.add.xml"
 
-
 [routes]
+stop_duration = 10
+repeat = 20
+num_buses = 3
+output_file = "grid.rou.xml"
+
+[sumocfg]
+output_file = "grid.sumocfg"
+# leave a trailing newline

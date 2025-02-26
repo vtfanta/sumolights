@@ -1,0 +1,24 @@
+<routes>
+    <vType id="bus" vClass="bus"/>
+    <route id="bus_route_0" edges="A0A1 A1B1 B1B2 B2A2 A2A1 A1A0 A0B0 B0B1 B1B2 B2A2 A2A1 A1B1 B1C1 C1C0 C0B0 B0B1 B1A1 A1A2 A2B2 B2B1 B1B0 B0A0" repeat="20">
+		<stop busStop="busStop_0" duration="10"/>
+		<stop busStop="busStop_1" duration="10"/>
+		<stop busStop="busStop_2" duration="10"/>
+		<stop busStop="busStop_3" duration="10"/>
+	</route>
+    <route id="bus_route_1" edges="A2B2 B2C2 C2C1 C1B1 B1B2 B2A2 A2A1 A1A0 A0B0 B0B1 B1B2 B2A2 A2A1 A1B1 B1B0 B0A0 A0A1 A1A2" repeat="20">
+		<stop busStop="busStop_4" duration="10"/>
+		<stop busStop="busStop_5" duration="10"/>
+		<stop busStop="busStop_6" duration="10"/>
+		<stop busStop="busStop_7" duration="10"/>
+	</route>
+    <route id="bus_route_2" edges="B1B2 B2C2 C2C1 C1B1 B1A1 A1A2 A2B2 B2B1 B1A1 A1A2 A2B2 B2C2 C2C1 C1C0 C0B0 B0B1 B1C1 C1C2 C2B2 B2A2 A2A1 A1B1" repeat="20">
+		<stop busStop="busStop_8" duration="10"/>
+		<stop busStop="busStop_9" duration="10"/>
+		<stop busStop="busStop_10" duration="10"/>
+		<stop busStop="busStop_11" duration="10"/>
+	</route>
+	<vehicle id="bus_0" type="bus" route="bus_route_0" depart="0."/>
+	<vehicle id="bus_1" type="bus" route="bus_route_1" depart="0."/>
+	<vehicle id="bus_2" type="bus" route="bus_route_2" depart="0."/>
+</routes>

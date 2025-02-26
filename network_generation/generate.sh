@@ -40,9 +40,13 @@ netgenerate \
     --output-file=${config[network,output_file]} 
 
 # Generate bus stops
-python generate_bus_stops.py \
+python generate_bus_routes.py \
     --net_file=${config[network,output_file]} \
     --bus_stop_file=${config[bus_stops,output_file]} \
     --every_nth=${config[bus_stops,every_nth]} \
-    --stop_length=${config[bus_stops,stop_length]} \
-    --stop_position=${config[bus_stops,stop_position]}
+    --stop_duration=${config[routes,stop_duration]} \
+    --stop_position=${config[bus_stops,stop_position]} \
+    --num_buses=${config[routes,num_buses]} \
+    --route_repeats=${config[routes,repeat]} \
+    --route_file=${config[routes,output_file]} \
+    --sumocfg_file=${config[sumocfg,output_file]}
