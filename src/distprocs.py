@@ -1,10 +1,7 @@
 import sys, os, subprocess, time
 from multiprocessing import *
 
-from tensorflow.python.framework.ops import disable_eager_execution
-
 from src.simproc import SimProc
-from src.learnerproc import LearnerProc
 from src.networkdata import NetworkData
 from src.sumosim import SumoSim
 

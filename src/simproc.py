@@ -1,10 +1,5 @@
 import sys, os, time
 from multiprocessing import *
-from silence_tensorflow import silence_tensorflow
-silence_tensorflow("ERROR")
-import tensorflow as tf
-tf.get_logger().setLevel('ERROR')
-tf.autograph.set_verbosity(0)
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -15,7 +10,6 @@ else:
 import traci
 
 from src.sumosim import SumoSim
-from src.nn_factory import gen_neural_networks
 from src.picklefuncs import save_data
 from src.helper_funcs import check_and_make_dir, get_time_now, write_to_log
 
@@ -40,20 +34,11 @@ class SimProc(Process):
         else:
             load = False
 
-        neural_networks = gen_neural_networks(self.args, 
-                                              self.netdata, 
-                                              self.args.tsc, 
-                                              self.netdata['inter'].keys(),
-                                              learner,
-                                              load,
-                                              self.args.n_hidden)
 
         print('sim proc '+str(self.idx)+' waiting at barrier ---------')
         write_to_log(' ACTOR #'+str(self.idx)+' WAITING AT SYNC WEIGHTS BARRIER...')
         self.barrier.wait()
         write_to_log(' ACTOR #'+str(self.idx)+'  BROKEN SYNC BARRIER...')
-        if self.args.l > 0 and self.args.mode == 'train':
-            neural_networks = self.sync_nn_weights(neural_networks)
         #barrier
         #grab weights from learner or load from file
         #barrier
@@ -71,7 +56,7 @@ class SimProc(Process):
             print(str(self.idx)+' test broken offset =================== '+str(self.offset))
             self.initial = False
             #just run one sim for stats
-            self.run_sim(neural_networks)
+            self.run_sim()
             if (self.eps == 1.0 or self.eps < 0.02) and self.args.mode == 'test':
                 self.write_to_csv(self.sim.sim_stats())
                 with open( str(self.eps)+'.csv','a+') as f:
@@ -81,7 +66,7 @@ class SimProc(Process):
             self.sim.close()
         print('------------------\nFinished on sim process '+str(self.idx)+' Closing\n---------------')
 
-    def run_sim(self, neural_networks):
+    def run_sim(self):
         start_t = time.time()
         self.sim.gen_sim()
 
@@ -95,7 +80,7 @@ class SimProc(Process):
             print(str(self.idx)+' train  broken offset =================== '+str(self.offset)+' at '+str(get_time_now()))
             write_to_log(' ACTOR #'+str(self.idx)+'  BROKEN OFFSET BARRIER...')
 
-        self.sim.create_tsc(self.rl_stats, self.exp_replays, self.eps, neural_networks)
+        self.sim.create_tsc(self.rl_stats, self.exp_replays, self.eps)
         write_to_log('ACTOR #'+str(self.idx)+'  START RUN SIM...')
         self.sim.run()
         print('sim finished in '+str(time.time()-start_t)+' on proc '+str(self.idx))
