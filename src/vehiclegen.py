@@ -30,6 +30,7 @@ class VehicleGen:
         
         # vehicle state for consensus
         self.veh_states = None
+        self.veh_names = None
 
         ###determine what function we run every step to 
         ###generate vehicles into sim
@@ -45,8 +46,9 @@ class VehicleGen:
         
     def run_at_start(self):
         # initialize vehicle states for consensus
-        self.veh_states = {bus_id : np.random.randn() for bus_id in self.get_bus_ids()}
-        
+        self.veh_names = ["bus_0", "bus_1", "bus_2"]
+        self.veh_states = {bus_id : np.random.randn() for bus_id in self.veh_names}
+        print(self.conn.getVersion())
         # create lines connecting buses to visualize communication
         bus_ids = self.get_bus_ids()
         for i in range(len(bus_ids)):
@@ -57,7 +59,6 @@ class VehicleGen:
         # this runs only once
         if self.t == 1:
             self.run_at_start()
-            print("HI")
 
         self.gen_vehicles()
         self.t += 1
@@ -136,28 +137,31 @@ class VehicleGen:
             for j in range(i+1, len(bus_IDs)):
                 if dist_dict[(bus_IDs[i], bus_IDs[j])] < 100:
                     # print("Bus " + bus_IDs[i] + " is close to Bus " + bus_IDs[j] + " at distance " + str(dist_dict[(bus_IDs[i], bus_IDs[j])]))
-                    # print(f"{self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+                    # print(f"{self.t} {self.veh_states[self.veh_names[0]]=}, {self.veh_states[self.veh_names[1]]=}")
                     # communication and discrete-time consensus
-                    self.conn.vehicle.setColor(bus_IDs[i], (255, 0, 0, 255))
-                    self.conn.vehicle.setColor(bus_IDs[j], (255, 0, 0, 255))
-                    self.veh_states['v_0'] = 1 / (1 + 1) * (self.veh_states['v_0'] + self.veh_states['v_1'])
-                    self.veh_states['v_1'] = 1 / (1 + 1) * (self.veh_states['v_1'] + self.veh_states['v_0'])
-                    print(f"CLOSE, {self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+                    self.veh_states[self.veh_names[0]] = 1 / (1 + 1) * (self.veh_states[self.veh_names[0]] + self.veh_states[self.veh_names[1]])
+                    self.veh_states[self.veh_names[1]] = 1 / (1 + 1) * (self.veh_states[self.veh_names[1]] + self.veh_states[self.veh_names[0]])
+                    # print(f"CLOSE, {self.t} {self.veh_states[self.veh_names[0]]=}, {self.veh_states[self.veh_names[1]]=}")
                     
+                    # draw red line between buses
                     bus1_pos = self.conn.vehicle.getPosition(bus_IDs[i])
                     bus2_pos = self.conn.vehicle.getPosition(bus_IDs[j])
                     self.conn.polygon.setShape(f"line_{i}_{j}", [bus1_pos, bus2_pos])
+                    self.conn.polygon.setLineWidth(f"line_{i}_{j}", 0.5)
                     self.conn.polygon.setColor(f"line_{i}_{j}", (255, 0, 0, 255))
+                    self.conn.polygon.setFilled(f"line_{i}_{j}", False)
                 else:
-                    self.conn.vehicle.setColor(bus_IDs[i], (255, 255, 0, 255))
-                    self.conn.vehicle.setColor(bus_IDs[j], (255, 255, 0, 255))
-                    self.veh_states['v_0'] += 0.4 * (np.random.rand() - 0.5)
-                    self.veh_states['v_1'] += 0.4 * (np.random.rand() - 0.5)
-                    print(f"{self.t} {self.veh_states['v_0']=}, {self.veh_states['v_1']=}")
+                    self.veh_states[self.veh_names[0]] += 0.4 * (np.random.rand() - 0.5)
+                    self.veh_states[self.veh_names[1]] += 0.4 * (np.random.rand() - 0.5)
+                    # print(f"{self.t} {self.veh_states[self.veh_names[0]]=}, {self.veh_states[self.veh_names[1]]=}")
 
+                    # make lines between buses invisible
                     bus1_pos = self.conn.vehicle.getPosition(bus_IDs[i])
                     bus2_pos = self.conn.vehicle.getPosition(bus_IDs[j])
+                    self.conn.polygon.setShape(f"line_{i}_{j}", [bus1_pos, bus2_pos])
+                    self.conn.polygon.setLineWidth(f"line_{i}_{j}", 0.)
                     self.conn.polygon.setColor(f"line_{i}_{j}", (255, 0, 0, 0))
+                    self.conn.polygon.setFilled(f"line_{i}_{j}", True)
 
         
     def gen_veh( self, veh_edges ):

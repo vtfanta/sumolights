@@ -1,7 +1,7 @@
 #!/bin/bash
 # generated with help of Gemini (fantavit)
 
-CONFIG_FILE="generation_config.toml"
+CONFIG_FILE=generation_config.toml
 
 # Declare an associative array
 declare -A config

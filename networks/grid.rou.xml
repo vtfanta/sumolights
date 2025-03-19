@@ -1,24 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- generated on 2025-02-17 11:05:11 by Eclipse SUMO netedit Version 1.22.0
--->
-
-<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
-    <!-- Routes -->
-    <route id="r_0" edges="B0C0 C0C1 C1C2 C2B2 B2A2 A2A1 A1A0 A0B0" color="yellow" repeat="10" cycleTime="300">
-        <stop busStop="bs_0" duration="20" until="40"/>
-        <stop busStop="bs_1" duration="20" until="130"/>
-        <stop busStop="bs_2" duration="20" until="190"/>
-        <stop busStop="bs_3" duration="20" until="250"/>
-    </route>
-    <route id="r_1" edges="C0B0 B0A0 A0A1 A1A2 A2B2 B2C2 C2C1 C1C0" color="yellow" repeat="10" cycleTime="300">
-        <stop busStop="bs_4" duration="20"/>
-        <stop busStop="bs_5" duration="20"/>
-        <stop busStop="bs_6" duration="20"/>
-        <stop busStop="bs_7" duration="20"/>
-    </route>
-    
-    <personFlow id="p_0" begin="0.00" end="10000" probability="0.1">
-        <personTrip from="B0C0" busStop="bs_3" modes="public"/>
-    </personFlow>
+<routes>
+    <vType id="bus" vClass="bus"/>
+    <route id="bus_route_0" edges="A0A1 A1B1 B1B2 B2A2 A2A1 A1A0 A0B0 B0B1 B1B2 B2A2 A2A1 A1B1 B1C1 C1C0 C0B0 B0B1 B1A1 A1A2 A2A3 A3B3 B3B4 B4A4 A4A3 A3A2 A2A1 A1B1 B1B0 B0A0" repeat="20">
+		<stop busStop="busStop_0" duration="10"/>
+		<stop busStop="busStop_1" duration="10"/>
+		<stop busStop="busStop_2" duration="10"/>
+		<stop busStop="busStop_3" duration="10"/>
+		<stop busStop="busStop_4" duration="10"/>
+		<stop busStop="busStop_5" duration="10"/>
+	</route>
+    <route id="bus_route_1" edges="A3B3 B3C3 C3C2 C2B2 B2B3 B3A3 A3A4 A4B4 B4C4 C4C3 C3B3 B3B4 B4A4 A4A3 A3A2 A2A1 A1A0 A0B0 B0B1 B1B2 B2A2 A2A1 A1B1 B1B0 B0A0 A0A1 A1A2 A2A3" repeat="20">
+		<stop busStop="busStop_6" duration="10"/>
+		<stop busStop="busStop_7" duration="10"/>
+		<stop busStop="busStop_8" duration="10"/>
+		<stop busStop="busStop_9" duration="10"/>
+		<stop busStop="busStop_10" duration="10"/>
+		<stop busStop="busStop_11" duration="10"/>
+	</route>
+    <route id="bus_route_2" edges="B1B2 B2B3 B3A3 A3A2 A2B2 B2B1 B1A1 A1A2 A2B2 B2B3 B3B4 B4A4 A4A3 A3B3 B3B2 B2A2 A2A3 A3B3 B3B4 B4C4 C4C3 C3B3 B3A3 A3A4 A4B4 B4B3 B3A3 A3A2 A2A1 A1B1" repeat="20">
+		<stop busStop="busStop_12" duration="10"/>
+		<stop busStop="busStop_13" duration="10"/>
+		<stop busStop="busStop_14" duration="10"/>
+		<stop busStop="busStop_15" duration="10"/>
+		<stop busStop="busStop_16" duration="10"/>
+		<stop busStop="busStop_17" duration="10"/>
+	</route>
+    <route id="bus_route_3" edges="B4C4 C4D4 D4D3 D3C3 C3C4 C4B4 B4B3 B3B2 B2B1 B1B0 B0C0 C0C1 C1C2 C2B2 B2B1 B1C1 C1C0 C0B0 B0B1 B1C1 C1C2 C2C3 C3B3 B3B2 B2C2 C2C1 C1B1 B1B2 B2B3 B3B4" repeat="20">
+		<stop busStop="busStop_18" duration="10"/>
+		<stop busStop="busStop_19" duration="10"/>
+		<stop busStop="busStop_20" duration="10"/>
+		<stop busStop="busStop_21" duration="10"/>
+		<stop busStop="busStop_22" duration="10"/>
+		<stop busStop="busStop_23" duration="10"/>
+	</route>
+    <route id="bus_route_4" edges="C2C3 C3C4 C4B4 B4B3 B3C3 C3C2 C2B2 B2B3 B3C3 C3C4 C4B4 B4B3 B3A3 A3A4 A4B4 B4C4 C4C3 C3B3 B3B4 B4C4 C4D4 D4E4 E4E3 E3D3 D3D4 D4C4 C4B4 B4B3 B3B2 B2C2" repeat="20">
+		<stop busStop="busStop_24" duration="10"/>
+		<stop busStop="busStop_25" duration="10"/>
+		<stop busStop="busStop_26" duration="10"/>
+		<stop busStop="busStop_27" duration="10"/>
+		<stop busStop="busStop_28" duration="10"/>
+		<stop busStop="busStop_29" duration="10"/>
+	</route>
+    <route id="bus_route_5" edges="D0D1 D1D2 D2C2 C2C1 C1D1 D1D0 D0C0 C0C1 C1D1 D1D2 D2D3 D3C3 C3C2 C2D2 D2D1 D1C1 C1C2 C2D2 D2D3 D3D4 D4C4 C4C3 C3D3 D3D2 D2C2 C2C1 C1C0 C0D0" repeat="20">
+		<stop busStop="busStop_30" duration="10"/>
+		<stop busStop="busStop_31" duration="10"/>
+		<stop busStop="busStop_32" duration="10"/>
+		<stop busStop="busStop_33" duration="10"/>
+		<stop busStop="busStop_34" duration="10"/>
+		<stop busStop="busStop_35" duration="10"/>
+	</route>
+    <route id="bus_route_6" edges="D3D4 D4C4 C4C3 C3B3 B3B4 B4C4 C4D4 D4D3 D3C3 C3C4 C4D4 D4E4 E4E3 E3E2 E2D2 D2D3 D3E3 E3E4 E4D4 D4D3 D3D2 D2D1 D1D0 D0E0 E0E1 E1E2 E2D2 D2D1 D1E1 E1E0 E0D0 D0D1 D1D2 D2D3" repeat="20">
+		<stop busStop="busStop_36" duration="10"/>
+		<stop busStop="busStop_37" duration="10"/>
+		<stop busStop="busStop_38" duration="10"/>
+		<stop busStop="busStop_39" duration="10"/>
+		<stop busStop="busStop_40" duration="10"/>
+		<stop busStop="busStop_41" duration="10"/>
+	</route>
+	<vehicle id="bus_0" type="bus" route="bus_route_0" depart="0."/>
+	<vehicle id="bus_1" type="bus" route="bus_route_1" depart="0."/>
+	<vehicle id="bus_2" type="bus" route="bus_route_2" depart="0."/>
+	<vehicle id="bus_3" type="bus" route="bus_route_3" depart="0."/>
+	<vehicle id="bus_4" type="bus" route="bus_route_4" depart="0."/>
+	<vehicle id="bus_5" type="bus" route="bus_route_5" depart="0."/>
+	<vehicle id="bus_6" type="bus" route="bus_route_6" depart="0."/>
 </routes>
