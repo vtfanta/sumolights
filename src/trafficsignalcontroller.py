@@ -15,6 +15,9 @@ import traci
 
 from src.trafficmetrics import TrafficMetrics
 
+# TODO parametrize the RSU OBU talk range
+comm_range = 100
+
 class TrafficSignalController:
     """Abstract base class for all traffic signal controller.
 
@@ -56,11 +59,40 @@ class TrafficSignalController:
 
         self.ep_rewards = []
         
+        # for erasing lines to buses
+        self.last_near_buses = None
+        
     def run(self):
         data = self.get_subscription_data()
         self.trafficmetrics.update(data)
         self.update(data)
         self.increment_controller()
+        if self.last_near_buses is not None:
+            self.undraw_lines_to_buses(self.last_near_buses)
+        near_buses = self.get_nearby_buses()
+        self.draw_lines_to_buses(near_buses) 
+        self.last_near_buses = near_buses
+
+    def get_bus_ids(self):
+        return list(filter(lambda t: self.conn.vehicle.getVehicleClass(t) == "bus", self.conn.vehicle.getIDList()))
+
+    def get_nearby_buses(self):
+        OBU_position = np.array(self.conn.junction.getPosition(self.id))
+        bus_positions = {bus_id : np.array(self.conn.vehicle.getPosition(bus_id)) for bus_id in self.get_bus_ids()}
+        nearby_bus_ids = [b_id for b_id in self.get_bus_ids() if np.linalg.norm(bus_positions[b_id] - OBU_position) < comm_range]
+        return nearby_bus_ids
+    
+    def draw_lines_to_buses(self, bus_ids):
+        for b_id in bus_ids:
+            line_id = f"line_{self.id}_{b_id}"
+            shape = [self.conn.vehicle.getPosition(b_id), self.conn.junction.getPosition(self.id)]
+            color = (255, 128, 0, 255)
+            self.conn.polygon.add(line_id, shape, color, layer=10, lineWidth=0.5)
+
+    def undraw_lines_to_buses(self, bus_ids):
+        for b_id in bus_ids:
+            line_id = f"line_{self.id}_{b_id}"
+            self.conn.polygon.remove(line_id)
 
     def get_metrics(self):
         for m in self.metric_args:
