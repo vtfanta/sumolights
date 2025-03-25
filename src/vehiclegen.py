@@ -31,6 +31,8 @@ class VehicleGen:
         # vehicle state for consensus
         self.veh_states = None
         self.veh_names = None
+        
+        self.junction_perdiod: float = 0.
 
         ###determine what function we run every step to 
         ###generate vehicles into sim

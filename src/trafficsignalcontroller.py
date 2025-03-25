@@ -67,6 +67,7 @@ class TrafficSignalController:
         self.trafficmetrics.update(data)
         self.update(data)
         self.increment_controller()
+
         if self.last_near_buses is not None:
             self.undraw_lines_to_buses(self.last_near_buses)
         near_buses = self.get_nearby_buses()

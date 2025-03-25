@@ -32,3 +32,7 @@ class UniformCycleTSC(TrafficSignalController):
 
     def update(self, data):
         pass
+        
+    def modify_phase_length(self, new_uniform_t):
+        self.uniform_t = new_uniform_t
+        self.cycle = self.get_phase_cycle()

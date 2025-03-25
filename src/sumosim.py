@@ -14,6 +14,8 @@ from src.trafficsignalcontroller import TrafficSignalController
 from src.tsc_factory import tsc_factory
 from src.vehiclegen import VehicleGen
 from src.helper_funcs import write_to_log
+    
+LIGHT_INDEX = 0
 
 class SumoSim:
     def __init__(self, cfg_fp, sim_len, tsc, nogui, netdata, args, idx):
@@ -24,6 +26,10 @@ class SumoSim:
         self.netdata = netdata
         self.args = args
         self.idx = idx
+
+        self.last_junction_state = None
+        self.junction_period = 0.
+        self.phase_step_counter = 0
 
     def gen_sim(self):
         #create sim stuff and intersections
@@ -118,8 +124,12 @@ class SumoSim:
         if not neural_networks:
             neural_networks = {tl:None for tl in self.tl_junc}
         #create traffic signal controllers for the junctions with lights
-        self.tsc = { tl:tsc_factory(self.args.tsc, tl, self.args, self.netdata, rl_stats[tl], exp_replays[tl], neural_networks[tl], eps, self.conn)  
+        if self.args.tsc == 'static':
+            self.tsc = { tl:TrafficSignalController(self.conn, tl, self.args.mode, self.netdata, 2, 3)  
                      for tl in self.tl_junc }
+        else:
+            self.tsc = { tl:tsc_factory(self.args.tsc, tl, self.args, self.netdata, rl_stats[tl], exp_replays[tl], neural_networks[tl], eps, self.conn)  
+                        for tl in self.tl_junc }
 
     def update_netdata(self):
         tl_junc = self.get_traffic_lights()
@@ -151,14 +161,39 @@ class SumoSim:
 
     def run(self):
         #execute simulation for desired length
+        dt = self.conn.simulation.getDeltaT()
         while self.t < self.sim_len:
             #create vehicles if vehiclegen class exists
             if self.vehiclegen:
                 self.vehiclegen.run()
                 self.vehiclegen.perform_actions()
             self.update_travel_times()
+            
+
             #run all traffic signal controllers in network
             for t in self.tsc:
+                if t == "C2":
+                    # get current state string
+                    junction_state = self.conn.trafficlight.getRedYellowGreenState(t)
+                    # get simulation time step
+
+                    # look for current length of green phase
+                    if self.last_junction_state is not None:
+                        if self.last_junction_state[LIGHT_INDEX] != junction_state[LIGHT_INDEX] and self.last_junction_state[LIGHT_INDEX] == "G":
+                            self.junction_period  = self.phase_step_counter
+                            self.phase_step_counter = 0
+                        elif junction_state[LIGHT_INDEX] == "G":
+                            self.phase_step_counter += dt 
+                    self.last_junction_state = junction_state
+                    
+                    print(f"Junction period: {self.junction_period}, counter: {self.phase_step_counter}")
+
+                    # modify the traffic light program period 
+                    if self.t == 100:
+                        self.tsc[t].modify_phase_length(20)
+                    if self.t == 200:
+                        self.tsc[t].modify_phase_length(10)
+
                 self.tsc[t].run()
             self.sim_step()
 
